@@ -1,0 +1,10 @@
+import { ColumnOptions } from 'typeorm';
+type CustomColumnOptions = Omit<ColumnOptions, 'type'>;
+export declare const IntegerColumn: (options?: CustomColumnOptions) => PropertyDecorator;
+export declare const TextColumn: (options?: CustomColumnOptions) => PropertyDecorator;
+export declare const BooleanColumn: (options?: CustomColumnOptions) => PropertyDecorator;
+export declare const DoubleColumn: (options?: CustomColumnOptions) => PropertyDecorator;
+export declare const EnumColumn: (options?: CustomColumnOptions) => PropertyDecorator;
+export declare const JSONColumn: (options?: CustomColumnOptions) => PropertyDecorator;
+export declare const DateColumn: (options?: CustomColumnOptions) => PropertyDecorator;
+export {};
