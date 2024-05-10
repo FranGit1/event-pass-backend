@@ -1,7 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
+import { Entity, Column, ManyToOne, ManyToMany } from 'typeorm';
+import { BaseEntity } from 'src/shared/base/base.entity';
+import { Organizer } from './organizer.entity';
 
 @Entity()
-export class Organizer extends BaseEntity {
+export class Organization extends BaseEntity {
   @Column()
   title: string;
 
@@ -34,5 +36,8 @@ export class Organizer extends BaseEntity {
 
   @Column({ nullable: true })
   organizerinstagram: string;
+
+  @ManyToMany(() => Organizer, organizer => organizer.organizations)
+  organizers: Organizer[];
 }
 
