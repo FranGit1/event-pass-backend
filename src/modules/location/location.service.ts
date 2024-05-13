@@ -3,6 +3,7 @@ import { LocationRepository } from "./location.repository";
 import { Location } from "src/entities/location.entity";
 import { CreateLocationDto } from "./dto/request/create-location.req.dto";
 import { UpdateLocationDto } from "./dto/request/update.location.req.dto";
+import { CreatableLocation } from "./location.type";
 
 @Injectable()
 export class LocationService {
@@ -12,7 +13,7 @@ export class LocationService {
     return this.locationRepository.findOne(id);
   }
 
-  create(createLocationDto: CreateLocationDto): Promise<Location> {
+  create(createLocationDto: CreatableLocation): Promise<Location> {
     return this.locationRepository.create(createLocationDto);
   }
 

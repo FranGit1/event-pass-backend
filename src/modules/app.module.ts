@@ -8,6 +8,7 @@ import { AutoMapperModule } from "./automapper/automapper.module";
 import { EventModule } from "./event/event.module";
 import { LocationModule } from "./location/location.module";
 import { TopicModule } from "./topic/topic.module";
+import { OrganizerModule } from "./organizer/organizer.module";
 
 /**
  * Core modules which are mandatory in order for the application to run.
@@ -22,7 +23,13 @@ const coreModules = [
 /**
  * Application modules containing the business logic.
  */
-const appModules = [AuthModule, EventModule, LocationModule, TopicModule];
+const appModules = [
+  AuthModule,
+  EventModule,
+  LocationModule,
+  TopicModule,
+  OrganizerModule,
+];
 
 @Module({
   imports: [...coreModules, ...appModules],
