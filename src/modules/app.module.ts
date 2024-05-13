@@ -10,6 +10,7 @@ import { LocationModule } from "./location/location.module";
 import { TopicModule } from "./topic/topic.module";
 import { OrganizerModule } from "./organizer/organizer.module";
 import { OrganizationModule } from "./organization/organization.module";
+import { BuyerModule } from "./buyer/buyer.module";
 
 /**
  * Core modules which are mandatory in order for the application to run.
@@ -31,6 +32,7 @@ const appModules = [
   TopicModule,
   OrganizerModule,
   OrganizationModule,
+  BuyerModule,
 ];
 
 @Module({
