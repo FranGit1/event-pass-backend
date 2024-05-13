@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty } from "class-validator";
 
 export class EnvironmentVariables {
   // JWT
@@ -36,4 +36,7 @@ export class EnvironmentVariables {
 
   @IsNotEmpty()
   DATABASE_NAME: string;
+
+  @IsNotEmpty()
+  RECAPTCHA_SECRET_KEY: string;
 }

@@ -16,6 +16,10 @@ export class BuyerRepository {
     return this.buyerRepository.findOne({ where: { id: id } });
   }
 
+  findOneByEmail(email: string): Promise<Buyer | null> {
+    return this.buyerRepository.findOne({ where: { email: email } });
+  }
+
   create(createBuyerDto: CreatableBuyer): Promise<Buyer> {
     const buyer = this.buyerRepository.create(createBuyerDto);
     return this.buyerRepository.save(buyer);

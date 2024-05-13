@@ -19,6 +19,10 @@ export class BuyerService {
     return this.buyerRepository.update(id, updateBuyerDto);
   }
 
+  async findBuyerByEmail(email: string): Promise<Buyer | undefined> {
+    return this.buyerRepository.findOneByEmail(email);
+  }
+
   remove(id: number): Promise<void> {
     return this.buyerRepository.remove(id);
   }
