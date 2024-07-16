@@ -15,6 +15,8 @@ export class OrganizerRepository {
     return this.organizerRepository.findOne({ where: { id: id } });
   }
 
+
+
   create(creatableOrganizer: CreatableOrganizer): Promise<Organizer> {
     const organizer = this.organizerRepository.create(creatableOrganizer);
     return this.organizerRepository.save(organizer);

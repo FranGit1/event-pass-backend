@@ -1,43 +1,57 @@
-import { Entity, Column, ManyToOne, ManyToMany } from 'typeorm';
-import { BaseEntity } from 'src/shared/base/base.entity';
-import { Organizer } from './organizer.entity';
+import {Entity, Column, ManyToMany, OneToMany} from 'typeorm';
+import {BaseEntity} from 'src/shared/base/base.entity';
+import {Organizer} from './organizer.entity';
+import {AutoMap} from "@automapper/classes";
+import {Event} from "./event.entity";
 
 @Entity()
 export class Organization extends BaseEntity {
-  @Column()
-  title: string;
+    @AutoMap()
+    @Column()
+    title: string;
 
-  @Column()
-  keyword: string;
+    @AutoMap()
+    @Column()
+    keyword: string;
 
-  @Column()
-  organizer: string;
+    @AutoMap()
+    @Column({ name: 'legal_name', nullable: true })
+    legalName: string;
 
-  @Column()
-  legalname: string;
+    @AutoMap()
+    @Column()
+    slug: string;
 
-  @Column()
-  slug: string;
+    @AutoMap()
+    @Column()
+    organizerLogo: string;
 
-  @Column()
-  organizerlogo: string;
+    @AutoMap()
+    @Column({nullable: true})
+    organizerDescription: string;
 
-  @Column({ nullable: true })
-  organizerdescription: string;
+    @AutoMap()
+    @Column({nullable: true})
+    organizerFacebook: string;
 
-  @Column({ nullable: true })
-  organizerfacebook: string;
+    @AutoMap()
+    @Column({nullable: true})
+    organizerLink: string;
 
-  @Column({ nullable: true })
-  organizerlink: string;
+    @AutoMap()
+    @Column({nullable: true})
+    organizerEmail: string;
 
-  @Column({ nullable: true })
-  organizeremail: string;
+    @AutoMap()
+    @Column({nullable: true})
+    organizerInstagram: string;
 
-  @Column({ nullable: true })
-  organizerinstagram: string;
+    @AutoMap()
+    @ManyToMany(() => Organizer, organizer => organizer.organizations)
+    organizers: Organizer[];
 
-  @ManyToMany(() => Organizer, organizer => organizer.organizations)
-  organizers: Organizer[];
+
+    @OneToMany(() => Event, event => event.organization)
+    events: Event[];
 }
 

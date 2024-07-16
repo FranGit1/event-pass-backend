@@ -5,14 +5,14 @@ import {
   Post,
   Body,
   Put,
-  Delete,
+  Delete, HttpStatus, UseInterceptors,
 } from "@nestjs/common";
 
 import { ApiTags, ApiOperation, ApiBearerAuth } from "@nestjs/swagger";
 import {
   CREATE_ORGANIZER_DOCUMENTATION,
   DELETE_ORGANIZER_BY_ID_DOCUMENTATION,
-  GET_ORGANIZER_BY_ID_DOCUMENTATION,
+  GET_ORGANIZER_BY_ID_DOCUMENTATION, GET_ORGANIZERS_ORGANIZATIONS,
   UPDATE_ORGANIZER_DOCUMENTATION,
 } from "./organizer.documentation";
 import { Organizer } from "src/entities/organizer.entity";
@@ -21,9 +21,15 @@ import { UpdateOrganizerDto } from "./dto/request/update-organizer.req.dto";
 import { OrganizerService } from "./organizer.service";
 import { Mapper } from "@automapper/core";
 import { InjectMapper } from "@timonmasberg/automapper-nestjs";
+import {Organization} from "../../entities/organization.entity";
+import {GetOrganizationByOrganizerResDto} from "./dto/response/get-organization-by-organizer.res.dto";
+import {HttpResponse} from "../../shared/http/http-response";
+import {createHttpResponse} from "../../shared/http/create-http-response";
+import {LoggerInterceptor} from "../../shared/interceptors/logger.interceptor";
 
 @ApiTags("Organizers")
 @Controller("organizers")
+@UseInterceptors(LoggerInterceptor)
 export class OrganizerController {
   constructor(
     private readonly organizerService: OrganizerService,
@@ -35,6 +41,8 @@ export class OrganizerController {
   findOne(@Param("id") id: number): Promise<Organizer | null> {
     return this.organizerService.findOne(id);
   }
+
+
 
   @ApiOperation(CREATE_ORGANIZER_DOCUMENTATION)
   @Post()

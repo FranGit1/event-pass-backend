@@ -5,6 +5,11 @@ export const GET_ORGANIZER_BY_ID_DOCUMENTATION: Partial<ApiOperationOptions> = {
   description: "Retrieve details of a specific organizer by its ID.",
 };
 
+export const GET_ORGANIZERS_ORGANIZATIONS: Partial<ApiOperationOptions> = {
+    summary: "Get organizations by organizer",
+    description: "Retrieve organizations of a specific organizer by its ID.",
+};
+
 export const CREATE_ORGANIZER_DOCUMENTATION: Partial<ApiOperationOptions> = {
   summary: "Create a new Organizer",
   description: "Create a new organizer with the provided data.",

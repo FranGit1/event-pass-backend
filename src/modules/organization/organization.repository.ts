@@ -26,6 +26,13 @@ export class OrganizationRepository {
     return this.organizationRepository.save(organization);
   }
 
+  async findOrganizationsByOrganizer(organizerId: number): Promise<Organization[]> {
+    return await this.organizationRepository.find({where : {id: organizerId},relations: {events : true}})
+        // .createQueryBuilder('organization')
+        // .innerJoin('organization.organizers', 'organizer')
+        // .where('organizer.id = :organizerId', { organizerId })
+        // .getMany();
+  }
   async update(
     id: number,
     editableOrganization: EditableOrganization

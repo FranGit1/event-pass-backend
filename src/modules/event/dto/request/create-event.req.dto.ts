@@ -6,65 +6,85 @@ import {
   IsDate,
   IsBoolean,
 } from "class-validator";
+import {AutoMap} from "@automapper/classes";
+
+export class CreateLocationReqDto {
+  @AutoMap()
+  city: string;
+  @AutoMap()
+  country: string;
+  @AutoMap()
+  name: string;
+  @AutoMap()
+  latitude: string;
+  @AutoMap()
+  longitude: string;
+}
+
 
 export class CreateEventDto {
-  @ApiProperty({ required: true })
-  @IsNotEmpty()
-  @IsString()
-  organizer: string;
 
   @ApiProperty({ required: true })
   @IsNotEmpty()
   @IsString()
+  @AutoMap()
   title: string;
 
   @ApiProperty({ required: true })
   @IsNotEmpty()
   @IsString()
+  @AutoMap()
   description: string;
 
   @ApiProperty({ required: true })
   @IsNotEmpty()
+  @AutoMap()
+  location: CreateLocationReqDto;
+
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
   @IsString()
-  location: string;
+  @AutoMap()
+  price: string;
 
   @ApiProperty({ required: true })
   @IsNotEmpty()
   @IsNumber()
-  price: number;
+  @AutoMap()
+  topicId: number;
+
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
+  @AutoMap()
+  startDate: Date;
+
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
+  @AutoMap()
+  endDate: Date;
 
   @ApiProperty({ required: true })
   @IsNotEmpty()
   @IsString()
-  topic: string;
-
-  @ApiProperty({ required: true })
-  @IsNotEmpty()
-  @IsDate()
-  startdate: Date;
-
-  @ApiProperty({ required: true })
-  @IsNotEmpty()
-  @IsDate()
-  enddate: Date;
-
-  @ApiProperty({ required: true })
-  @IsNotEmpty()
-  @IsString()
+  @AutoMap()
   keywords: string;
 
   @ApiProperty({ required: true })
   @IsNotEmpty()
   @IsString()
-  featuredimage: string;
+  @AutoMap()
+  featuredImage: string;
 
   @ApiProperty({ required: true })
   @IsNotEmpty()
   @IsBoolean()
-  displayinslider: boolean;
+  @AutoMap()
+  displayInSlider: boolean;
 
   @ApiProperty({ required: true })
   @IsNotEmpty()
   @IsNumber()
-  sliderposition: number;
+  @AutoMap()
+  sliderPosition: number;
 }
+

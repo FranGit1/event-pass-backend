@@ -1,11 +1,9 @@
 // organization.service.ts
-import { Injectable } from "@nestjs/common";
-import {
-  CreatableOrganization,
-  EditableOrganization,
-} from "./organization.type";
-import { Organization } from "src/entities/organization.entity";
-import { OrganizationRepository } from "./organization.repository";
+import {Injectable} from "@nestjs/common";
+import {CreatableOrganization, EditableOrganization,} from "./organization.type";
+import {Organization} from "src/entities/organization.entity";
+import {OrganizationRepository} from "./organization.repository";
+import {isBefore} from "date-fns";
 
 @Injectable()
 export class OrganizationService {
@@ -20,6 +18,13 @@ export class OrganizationService {
   create(createableOrganization: CreatableOrganization): Promise<Organization> {
     return this.organizationRepository.create(createableOrganization);
   }
+
+
+  async findOrganizationsByOrganizerId(id: number){
+    return await this.organizationRepository.findOrganizationsByOrganizer(id);
+
+  }
+
 
   update(
     id: number,

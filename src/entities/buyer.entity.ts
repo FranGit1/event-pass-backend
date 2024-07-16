@@ -7,18 +7,23 @@ import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Buyer extends BaseEntity {
+  @AutoMap()
   @Column()
   username: string;
 
+  @AutoMap()
   @Column()
   firstName: string;
 
+  @AutoMap()
   @Column()
   lastName: string;
 
+  @AutoMap()
   @Column()
   email: string;
 
+  @AutoMap()
   @Column()
   password: string;
 

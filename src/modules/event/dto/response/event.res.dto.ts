@@ -1,70 +1,85 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsNotEmpty,
-  IsString,
-  IsDate,
-  IsNumber,
-  IsBoolean,
-} from "class-validator";
+
+import {AutoMap} from "@automapper/classes";
+
+export class EventsResDtoLocation {
+  @ApiProperty()
+  @AutoMap()
+  city: string;
+
+  @ApiProperty()
+  @AutoMap()
+  name: string;
+
+  @ApiProperty()
+  @AutoMap()
+  country: string;
+
+  @ApiProperty()
+  @AutoMap()
+  longitude: string;
+
+  @ApiProperty()
+  @AutoMap()
+  latitude: string;
+}
+
 
 export class EventResDto {
+
   @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
+  @AutoMap()
+  id: number;
+
+  @ApiProperty()
+
+  @AutoMap()
   organizer: string;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
+
+  @AutoMap()
   title: string;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
+  @AutoMap()
   description: string;
 
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  location: string;
+  @ApiProperty({ type: [EventsResDtoLocation] })
+  @AutoMap(() => [EventsResDtoLocation])
+  location: EventsResDtoLocation;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
+  @AutoMap()
   price: number;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
+  @AutoMap()
   topic: string;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsDate()
-  startdate: Date;
+
+  @AutoMap()
+  startDate: Date;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsDate()
-  enddate: Date;
+
+  @AutoMap()
+  endDate: Date;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
+  @AutoMap()
   keywords: string;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  featuredimage: string;
+  @AutoMap()
+  featuredImage: string;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsBoolean()
-  displayinslider: boolean;
+  @AutoMap()
+  displayInSlider: boolean;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
-  sliderposition: number;
+  @AutoMap()
+  sliderPosition: number;
 }
