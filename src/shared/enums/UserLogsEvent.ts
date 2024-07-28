@@ -1,0 +1,5 @@
+export enum UserLogsEvent {
+    LOGIN_SUCCESSFUL = "LOGIN_SUCCESSFUL",
+    LOGIN_FAILED = "LOGIN_FAILED",
+    LOGOUT = "LOGOUT",
+}

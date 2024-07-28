@@ -16,8 +16,19 @@ export class OrganizationRepository {
   ) {}
 
   findOne(id: number): Promise<Organization | null> {
-    return this.organizationRepository.findOne({ where: { id: id } });
+    return this.organizationRepository.findOne({ where: { id: id },relations: {organizers : true} });
   }
+
+  async findAll(): Promise<Organization[] | null> {
+    return await this.organizationRepository.find();
+
+  }
+
+  async findOrganizationById(id: number): Promise<Organization | null> {
+    return await this.organizationRepository.findOne({ where: { id } });
+  }
+
+
 
   create(creatableOrganization: CreatableOrganization): Promise<Organization> {
     const organization = this.organizationRepository.create(
@@ -26,12 +37,24 @@ export class OrganizationRepository {
     return this.organizationRepository.save(organization);
   }
 
+
+  save(creatableOrganization: CreatableOrganization): Promise<Organization> {
+
+    return this.organizationRepository.save(creatableOrganization);
+  }
   async findOrganizationsByOrganizer(organizerId: number): Promise<Organization[]> {
-    return await this.organizationRepository.find({where : {id: organizerId},relations: {events : true}})
-        // .createQueryBuilder('organization')
-        // .innerJoin('organization.organizers', 'organizer')
-        // .where('organizer.id = :organizerId', { organizerId })
-        // .getMany();
+    return await this.organizationRepository.find({
+      where: {
+        organizers: {
+          id: organizerId
+        }
+      },
+      relations: {
+        organizers: true,
+        events: true
+      }
+    });
+
   }
   async update(
     id: number,

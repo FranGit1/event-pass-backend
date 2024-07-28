@@ -2,7 +2,7 @@ import { AutoMap } from "@automapper/classes";
 import { IsBoolean, IsString } from "class-validator";
 import { Role } from "src/shared/enums/Role";
 
-export class BuyerReqDto {
+export class OrganizerReqDto {
   @IsString()
   @AutoMap()
   email: string;
@@ -22,6 +22,14 @@ export class BuyerReqDto {
   @IsString()
   @AutoMap()
   username: string;
+
+  @IsString()
+  @AutoMap()
+  companyName: string;
+
+  @IsString()
+  @AutoMap()
+  contactInformation: string;
 
   @AutoMap()
   role: Role;

@@ -26,6 +26,9 @@ import {GetOrganizationByOrganizerResDto} from "./dto/response/get-organization-
 import {HttpResponse} from "../../shared/http/http-response";
 import {createHttpResponse} from "../../shared/http/create-http-response";
 import {LoggerInterceptor} from "../../shared/interceptors/logger.interceptor";
+import {CREATE_EVENT_DOCUMENTATION} from "../event/event.documentation";
+import {CreateEventDto} from "../event/dto/request/create-event.req.dto";
+import {Event} from "../../entities/event.entity";
 
 @ApiTags("Organizers")
 @Controller("organizers")
@@ -41,6 +44,8 @@ export class OrganizerController {
   findOne(@Param("id") id: number): Promise<Organizer | null> {
     return this.organizerService.findOne(id);
   }
+
+
 
 
 

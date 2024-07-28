@@ -3,7 +3,8 @@ import { AutoMap } from "@automapper/classes";
 import { BaseEntity } from "src/shared/base/base.entity";
 import { Role } from "src/shared/enums/Role";
 import { EnumColumn } from "src/shared/typeorm/columns";
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, OneToMany} from "typeorm";
+import {UserLogsEntity} from "./userLogs.entity";
 
 @Entity()
 export class Buyer extends BaseEntity {
@@ -30,4 +31,11 @@ export class Buyer extends BaseEntity {
   @AutoMap()
   @EnumColumn({ enum: Role, nullable: true, default: Role.buyer })
   role: Role;
+
+
+  @AutoMap(() => [UserLogsEntity])
+  @OneToMany(() => UserLogsEntity, (userLogs) => userLogs.buyer, {
+    cascade: ["insert"],
+  })
+  buyerLogs?: UserLogsEntity[];
 }

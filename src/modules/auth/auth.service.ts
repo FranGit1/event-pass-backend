@@ -1,14 +1,17 @@
-import { Injectable, Res, UnauthorizedException } from "@nestjs/common";
+import {ConflictException, Injectable, Res, UnauthorizedException} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { v4 as uuidv4 } from "uuid";
 import { compare, hash } from "bcrypt";
-import { BuyerReqDto } from "./dto/request/buyer.req.dto";
+import { OrganizerReqDto} from "./dto/request/organizer.req.dto";
 import { validate } from "class-validator";
 import { BuyerService } from "../buyer/buyer.service";
 import { ConfigurationService } from "../configuration/configuration.service";
 import { Role } from "src/shared/enums/Role";
 
 import axios from "axios";
+import {OrganizerService} from "../organizer/organizer.service";
+import {UserLogsService} from "../user-logs/user-logs.service";
+import {UserLogsEvent} from "../../shared/enums/UserLogsEvent";
 
 const SALT_ROUNDS = 10;
 
@@ -17,6 +20,8 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private buyerService: BuyerService,
+    private organizerService: OrganizerService,
+    private userLogsService: UserLogsService,
     private configurationService: ConfigurationService
   ) {}
 
@@ -34,25 +39,25 @@ export class AuthService {
   }
 
   async createUser(body: any): Promise<Record<string, any>> {
-    const buyerDTO = new BuyerReqDto();
-    buyerDTO.email = body.email;
-    buyerDTO.firstName = body.firstName;
-    buyerDTO.lastName = body.lastName;
-    buyerDTO.username = body.username;
-    buyerDTO.password = await hash(body.password, SALT_ROUNDS);
-    buyerDTO.role = Role.buyer;
+    const organizerDTO = new OrganizerReqDto();
+    organizerDTO.email = body.email;
+    organizerDTO.firstName = body.firstName;
+    organizerDTO.lastName = body.lastName;
+    organizerDTO.username = body.username;
+    organizerDTO.companyName = body.companyName;
+    organizerDTO.contactInformation = body.contactInfo;
+    organizerDTO.password = await hash(body.password, SALT_ROUNDS);
+    organizerDTO.role = Role.organizer;
 
-    const errors = await validate(buyerDTO);
-
+    const errors = await validate(organizerDTO);
     if (errors.length > 0) {
-      return { isValid: false, buyerDTO };
+      return { isValid: false, organizerDTO };
     }
-
     try {
-      await this.buyerService.create(buyerDTO);
-      return { isValid: true, buyerDTO };
+      await this.organizerService.create(organizerDTO);
+      return { isValid: true, organizerDTO };
     } catch (error) {
-      return { isValid: false, buyerDTO };
+      return { isValid: false, organizerDTO };
     }
   }
 
@@ -64,26 +69,42 @@ export class AuthService {
   }
 
   async authenticateUser(email: string, password: string) {
-    const user = await this.buyerService.findBuyerByEmail(email);
+
+    const [buyer, organizer] = await Promise.all([
+      this.buyerService.findBuyerByEmail(email),
+      this.organizerService.findOrganizerByEmail(email),
+    ]);
+
+    const user = buyer || organizer;
 
     if (user) {
+      const isUserAccountBlocked =
+          await this.userLogsService.isUserAccountBlocked(
+              user.id,
+              user.role === Role.buyer
+          );
+      if (isUserAccountBlocked) {
+        throw new ConflictException(
+            "This user account is locked. Please contact support for reactivation."
+        );
+      }
+
       const isAuthenticated = await this.validatePassword(
-        user.password,
-        password
+          user.password,
+          password
       );
-      if (isAuthenticated) return user;
-      // if (!isAuthenticated) {
-      //   user.role == Role.buyer
-      //     ? await this.userLogsService.createBuyerEvent(
-      //         //@ts-ignore
-      //         user,
-      //         UserLogsEvent.LOGIN_FAILED
-      //       )
-      //     : //@ts-ignore
-      //       await this.userLogsService.createAdminEvent(user, LOGIN_FAILED);
-      // } else {
-      //   return user;
-      // }
+      if (!isAuthenticated) {
+        user.role == Role.buyer
+            ? await this.userLogsService.createBuyerEvent(
+                //@ts-ignore
+                user,
+                UserLogsEvent.LOGIN_FAILED
+            )
+            : //@ts-ignore
+            await this.userLogsService.createOrganizerEvent(user, LOGIN_FAILED);
+      } else {
+        return user;
+      }
     }
 
     throw new UnauthorizedException("Invalid user credentials");

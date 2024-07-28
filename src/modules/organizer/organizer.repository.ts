@@ -14,8 +14,18 @@ export class OrganizerRepository {
   findOne(id: number): Promise<Organizer | null> {
     return this.organizerRepository.findOne({ where: { id: id } });
   }
+  findOneWithFav(id: number): Promise<Organizer | null> {
+    return this.organizerRepository.findOne({ where: { id: id } ,relations: {favoriteOrganizations : true}});
+  }
 
 
+  findOneWithOrganizations(id: number): Promise<Organizer | null> {
+    return this.organizerRepository.findOne({ where: { id: id } ,relations: {organizations: true}});
+  }
+
+  findOrganizerByEmail(email : string): Promise<Organizer | null>  {
+      return this.organizerRepository.findOne({where: {email: email}})
+  }
 
   create(creatableOrganizer: CreatableOrganizer): Promise<Organizer> {
     const organizer = this.organizerRepository.create(creatableOrganizer);
@@ -32,5 +42,9 @@ export class OrganizerRepository {
 
   async remove(id: number): Promise<void> {
     await this.organizerRepository.delete(id);
+  }
+
+  async save(organizer: Organizer): Promise<Organizer> {
+    return await this.organizerRepository.save(organizer);
   }
 }

@@ -3,6 +3,7 @@ import {BaseEntity} from 'src/shared/base/base.entity';
 import {Organizer} from './organizer.entity';
 import {AutoMap} from "@automapper/classes";
 import {Event} from "./event.entity";
+import {OrganizationCode} from "./organization-code.entity";
 
 @Entity()
 export class Organization extends BaseEntity {
@@ -50,8 +51,13 @@ export class Organization extends BaseEntity {
     @ManyToMany(() => Organizer, organizer => organizer.organizations)
     organizers: Organizer[];
 
+    @OneToMany(() => OrganizationCode, code => code.organization)
+    codes: OrganizationCode[];
 
     @OneToMany(() => Event, event => event.organization)
     events: Event[];
+
+    @ManyToMany(() => Organizer, (organizer) => organizer.favoriteOrganizations)
+    favoriteBy: Organizer[];
 }
 
