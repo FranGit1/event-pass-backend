@@ -5,6 +5,10 @@ import {AutoMap} from "@automapper/classes";
 export class EventsResDtoLocation {
   @ApiProperty()
   @AutoMap()
+  id: number;
+
+  @ApiProperty()
+  @AutoMap()
   city: string;
 
   @ApiProperty()
@@ -25,6 +29,15 @@ export class EventsResDtoLocation {
 }
 
 
+export class EventsResDtoTopic {
+  @ApiProperty()
+  @AutoMap()
+  id: number;
+
+  @ApiProperty()
+  @AutoMap()
+  name: string;
+  }
 export class EventResDto {
 
   @ApiProperty()
@@ -53,9 +66,10 @@ export class EventResDto {
   @AutoMap()
   price: number;
 
-  @ApiProperty()
-  @AutoMap()
-  topic: string;
+
+  @ApiProperty({ type: [EventsResDtoTopic] })
+  @AutoMap(() => [EventsResDtoTopic])
+  topic: EventsResDtoTopic;
 
   @ApiProperty()
 

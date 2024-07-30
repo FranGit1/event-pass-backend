@@ -69,6 +69,11 @@ export class OrganizationService {
         }
     }
 
+    async getFavoritesOrganizationsForOrganizer(organizerId: number){
+        const organizer =  await this.organizerService.findOneWithFav(organizerId);
+        return organizer.favoriteOrganizations;
+    }
+
     async removeFavorite(organizerId: number, organizationId: number): Promise<void> {
         const organizer = await this.organizerService.findOneWithFav(organizerId);
         const organization = await this.organizationRepository.findOne(organizationId);

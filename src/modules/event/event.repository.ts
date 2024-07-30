@@ -19,7 +19,7 @@ export class EventRepository extends BaseRepository<
     }
 
     async findEventById(id: number): Promise<Event | null> {
-        return this.eventRepository.findOne({where: {id: id}});
+        return this.eventRepository.findOne({where: {id: id},relations: {location: true, topic: true}});
     }
 
     async findEventsByOrganization(organizationId: number): Promise<Event[] | null> {

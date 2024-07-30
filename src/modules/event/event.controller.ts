@@ -18,7 +18,7 @@ import {
     DELETE_EVENT_BY_ID_DOCUMENTATION,
     GET_ALL_EVENTS_DOCUMENTATION,
     GET_EVENT_BY_ID_DOCUMENTATION,
-    UPDATE_EVENT_BY_ID_DOCUMENTATION,
+    UPDATE_EVENT_BY_ID_DOCUMENTATION, UPDATE_EVENT_DOCUMENTATION,
 } from "./event.documentation";
 import {createHttpResponse} from "src/shared/http/create-http-response";
 import {HttpResponse} from "src/shared/http/http-response";
@@ -115,6 +115,8 @@ export class EventController {
         );
     }
 
+
+
     @ApiOperation(UPDATE_EVENT_BY_ID_DOCUMENTATION)
     @ApiBearerAuth()
     @Put(":id")
@@ -139,10 +141,13 @@ export class EventController {
     @ApiBearerAuth()
     @Delete(":id")
     async deleteEvent(
-        @Param() params: EntityIdParam
-    ): Promise<HttpResponse<PublicRouteResponseDto>> {
-        const {id} = params;
-        await this.eventService.deleteEvent(id);
+        @Param('id') id: number    ): Promise<HttpResponse<PublicRouteResponseDto>> {
+        await this.eventService.deleteEvent(Number(id));
         return createHttpResponse(HttpStatus.OK, "Event deleted successfully.");
     }
+
+
+
+
+
 }

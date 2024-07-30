@@ -1,70 +1,93 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
-  IsOptional,
+  IsNotEmpty,
   IsString,
-  IsDate,
   IsNumber,
+  IsDate,
   IsBoolean,
 } from "class-validator";
+import {AutoMap} from "@automapper/classes";
+import {CreateLocationReqDto} from "./create-event.req.dto";
+
+export class UpdateLocationReqDto {
+  @AutoMap()
+  id: number;
+  @AutoMap()
+  city: string;
+  @AutoMap()
+  country: string;
+  @AutoMap()
+  name: string;
+  @AutoMap()
+  latitude: string;
+  @AutoMap()
+  longitude: string;
+}
+
 
 export class UpdateEventDto {
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  organizer?: string;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
   @IsString()
-  title?: string;
+  @AutoMap()
+  title: string;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
   @IsString()
-  description?: string;
+  @AutoMap()
+  description: string;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
+  @AutoMap()
+  location: UpdateLocationReqDto;
+
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
   @IsString()
-  locationId?: number;
+  @AutoMap()
+  price: string;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  price?: string;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
   @IsNumber()
-  topicId?: number;
+  @AutoMap()
+  topicId: number;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsDate()
-  startdate?: Date;
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
+  @AutoMap()
+  startDate: Date;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsDate()
-  enddate?: Date;
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
+  @AutoMap()
+  endDate: Date;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
   @IsString()
-  keywords?: string;
+  @AutoMap()
+  keywords: string;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
   @IsString()
-  featuredimage?: string;
+  @AutoMap()
+  featuredImage: string;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
   @IsBoolean()
-  displayinslider?: boolean;
+  @AutoMap()
+  displayInSlider: boolean;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
   @IsNumber()
-  sliderposition?: number;
+  @AutoMap()
+  sliderPosition: number;
 }
+

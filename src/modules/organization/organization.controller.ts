@@ -1,11 +1,27 @@
-import {Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, UseGuards, UseInterceptors,} from "@nestjs/common";
+import {
+    Body,
+    ConflictException,
+    Controller,
+    Delete,
+    Get,
+    HttpStatus,
+    Param,
+    Post,
+    Put,
+    UseGuards,
+    UseInterceptors,
+} from "@nestjs/common";
 import {ApiBearerAuth, ApiOperation, ApiTags} from "@nestjs/swagger";
 import {
     ADD_FAVORITE_DOCUMENTATION,
     CREATE_ORGANIZATION_DOCUMENTATION,
     DELETE_ORGANIZATION_BY_ID_DOCUMENTATION,
     GET_ALL_ORGANIZATIONS_DOCUMENTATION,
-    GET_ORGANIZATION_BY_ID_DOCUMENTATION, POST_LEAVE_ORGANIZATION_DOCUMENTATION, REMOVE_FAVORITE_DOCUMENTATION,
+    GET_FAVORITES_ORGANIZATIONS_DOCUMENTATION,
+    GET_FAVOURITE_ORGANIZATIONS_BY_ORGANIZER_DOCUMENTATION,
+    GET_ORGANIZATION_BY_ID_DOCUMENTATION,
+    POST_LEAVE_ORGANIZATION_DOCUMENTATION,
+    REMOVE_FAVORITE_DOCUMENTATION,
     UPDATE_ORGANIZATION_DOCUMENTATION,
 } from "./organization.documentation";
 import {Organization} from "src/entities/organization.entity";
@@ -27,6 +43,8 @@ import {AllOrganizationsResDto} from "./dto/response/all-organizations.res.dto";
 import {Event} from "../../entities/event.entity";
 import {AddFavoriteOrganizationReqDto} from "./dto/request/add-favorite-organization.req.dto";
 import {EntityIdParam} from "../event/dto/request/entity-id.param";
+import {PublicRouteResponseDto} from "../event/dto/response/public-route.res.dto";
+import {ApiCustomResponse} from "../../shared/decorators/api-response.decorator";
 
 @ApiTags("Organizations")
 @Controller("organizations")
@@ -165,12 +183,50 @@ export class OrganizationController {
     @UseGuards(JwtGuard)
     @Delete("favourite/:id")
     async removeFavorite(
-        @Param() params: EntityIdParam,
+        @Param("id") id: number,
         @AuthUserIdParam() userId: number
     ): Promise<HttpResponse<void>> {
-        const {id} = params;
         const payload = await this.organizationService.removeFavorite(userId, id);
         const message = "Organization remove from favorites successfully.";
+        return createHttpResponse(HttpStatus.OK, message, payload);
+    }
+
+
+    @ApiOperation(GET_FAVORITES_ORGANIZATIONS_DOCUMENTATION)
+    @ApiCustomResponse(PublicRouteResponseDto)
+    @ApiBearerAuth()
+    @UseGuards(JwtGuard)
+    @Get("favorites/get-favorites-for-organizer")
+    async getFavouriteOrganizationsByOrganizer(
+        @AuthUserIdParam() userId: number
+    ): Promise<HttpResponse<GetOrganizationByOrganizerResDto[]>> {
+        console.log(userId)
+            const favorites = await this.organizationService.getFavoritesOrganizationsForOrganizer(userId);
+            const payload = this.autoMapper.mapArray(favorites,Organization,GetOrganizationByOrganizerResDto);
+        const message = "Favorites organizations retrieved successfully.";
+
+        return createHttpResponse(HttpStatus.OK, message, payload);
+    }
+
+
+    @ApiOperation(GET_FAVOURITE_ORGANIZATIONS_BY_ORGANIZER_DOCUMENTATION)
+    @ApiCustomResponse(PublicRouteResponseDto)
+    @ApiBearerAuth()
+    @UseGuards(JwtGuard)
+    @Get("favourite/ids")
+    async getFavouriteOrganizationsIdsByUser(
+        @AuthUserIdParam() userId: number
+    ): Promise<HttpResponse<{ id: number }[]>> {
+        const favorites = await this.organizationService.getFavoritesOrganizationsForOrganizer(userId);
+
+        if (!favorites) {
+            throw new ConflictException("No organizations found.");
+        }
+        const message = "Organizations retrieved successfully.";
+        const payload = favorites.map((organization) => ({
+            id: organization.id,
+        }));
+
         return createHttpResponse(HttpStatus.OK, message, payload);
     }
 

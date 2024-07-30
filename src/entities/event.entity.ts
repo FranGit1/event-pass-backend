@@ -21,7 +21,7 @@ export class Event extends BaseEntity {
   description: string;
 
   @AutoMap()
-  @OneToOne(() => Location, location => location.event)
+  @OneToOne(() => Location, location => location.event,{cascade:true,nullable:true})
   @JoinColumn()
   location: Location;
 

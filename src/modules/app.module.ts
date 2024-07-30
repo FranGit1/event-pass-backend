@@ -13,6 +13,7 @@ import {OrganizationModule} from "./organization/organization.module";
 import {BuyerModule} from "./buyer/buyer.module";
 import {UserLogsModule} from "./user-logs/user-logs.module";
 import {OrganizationCodeModule} from "./organization-code/organization-code.module";
+import {FirebaseModule} from "./firebase/firebase.module";
 
 /**
  * Core modules which are mandatory in order for the application to run.
@@ -36,7 +37,8 @@ const appModules = [
     OrganizationModule,
     BuyerModule,
     UserLogsModule,
-    OrganizationCodeModule
+    OrganizationCodeModule,
+    FirebaseModule
 ];
 
 @Module({

@@ -1,9 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsInt, IsNotEmpty } from "class-validator";
+import {IsInt, IsNotEmpty, IsNumber} from "class-validator";
 
 export class EntityIdParam {
   @ApiProperty()
-  @IsNotEmpty()
+  @IsNumber()
   @IsInt()
   id: number;
 }

@@ -110,6 +110,20 @@ export class ConfigurationService {
     return this.configService.get("ADMIN_APPLICATION_URL");
   }
 
+  get firebaseProjectId(): string {
+    return this.configService.get('FIREBASE_PROJECT_ID');
+  }
+  get firebaseClientEmail(): string {
+    return this.configService.get('FIREBASE_CLIENT_EMAIL');
+  }
+  get firebasePrivateKey(): string {
+    return this.configService.get('FIREBASE_PRIVATE_KEY');
+  }
+
+  get firebaseBucketName(): string {
+    return this.configService.get('FIREBASE_PRIVATE_KEY');
+  }
+
   get isProduction(): boolean {
     return (
       this.getBackendProductionApplicationUrl === this.getBackendApplicationUrl

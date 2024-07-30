@@ -8,9 +8,10 @@ import { Event } from "src/entities/event.entity";
 import {LocationModule} from "../location/location.module";
 import {TopicModule} from "../topic/topic.module";
 import {OrganizationModule} from "../organization/organization.module";
+import {FirebaseModule} from "../firebase/firebase.module";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Event]), AutoMapperModule,LocationModule,TopicModule, OrganizationModule],
+  imports: [TypeOrmModule.forFeature([Event]), AutoMapperModule,LocationModule,TopicModule, OrganizationModule,FirebaseModule],
   providers: [EventRepository, EventService],
   controllers: [EventController],
   exports: [EventService],

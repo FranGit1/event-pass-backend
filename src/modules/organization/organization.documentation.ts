@@ -42,3 +42,15 @@ export const DELETE_ORGANIZATION_BY_ID_DOCUMENTATION: Partial<ApiOperationOption
     summary: "Delete Organization by ID",
     description: "Delete an organization by its unique identifier.",
   };
+
+export const GET_FAVORITES_ORGANIZATIONS_DOCUMENTATION: Partial<ApiOperationOptions> =
+    {
+        summary: "Get favorite Organizations",
+        description: "Retrieve favorites by organizer",
+    };
+export const GET_FAVOURITE_ORGANIZATIONS_BY_ORGANIZER_DOCUMENTATION: Partial<ApiOperationOptions> = {
+    summary: "Fetches favourites Organizations by organizer",
+    description:
+        "Used to retrieve favourites Organizations for organizer",
+};
+

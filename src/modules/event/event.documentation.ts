@@ -15,6 +15,10 @@ export const CREATE_EVENT_DOCUMENTATION: Partial<ApiOperationOptions> = {
   summary: "Creates a new event",
   description: "Used to create a new event with the provided data",
 };
+export const UPDATE_EVENT_DOCUMENTATION: Partial<ApiOperationOptions> = {
+  summary: "Updates event",
+  description: "Used to update event with the provided data",
+};
 
 export const DELETE_EVENT_BY_ID_DOCUMENTATION: Partial<ApiOperationOptions> = {
   summary: "Deletes an event by ID",
