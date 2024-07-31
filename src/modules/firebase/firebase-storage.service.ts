@@ -30,6 +30,7 @@ export class FirebaseStorageService {
         try {
             const bucket = firebase.storage().bucket();
             const imageName = this.extractImageName(fileUrl);
+            console.log(imageName)
             await bucket.file("images/"+imageName).delete();
 
 

@@ -38,25 +38,34 @@ export class EventsResDtoTopic {
   @AutoMap()
   name: string;
   }
-export class EventResDto {
 
+  export class EventsResDtoOrganization {
+  @ApiProperty()
+  @AutoMap()
+  title: string;
+
+  @ApiProperty()
+  @AutoMap()
+  slug: string;
+  }
+export class EventResDto {
   @ApiProperty()
   @AutoMap()
   id: number;
 
-  @ApiProperty()
-
-  @AutoMap()
-  organizer: string;
 
   @ApiProperty()
-
   @AutoMap()
   title: string;
 
   @ApiProperty()
   @AutoMap()
   description: string;
+
+
+  @ApiProperty({ type: [EventsResDtoOrganization] })
+  @AutoMap(() => [EventsResDtoOrganization])
+  organization: EventsResDtoOrganization;
 
   @ApiProperty({ type: [EventsResDtoLocation] })
   @AutoMap(() => [EventsResDtoLocation])

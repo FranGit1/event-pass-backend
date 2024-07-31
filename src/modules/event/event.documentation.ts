@@ -11,6 +11,12 @@ export const GET_EVENT_BY_ID_DOCUMENTATION: Partial<ApiOperationOptions> = {
     "Used to retrieve detailed information about a specific event by ID",
 };
 
+export const GET_LIVE_EVENTS_DOCUMENTATION: Partial<ApiOperationOptions> = {
+  summary: "Fetches live events",
+  description:
+      "Used to retrieve all live events.",
+};
+
 export const CREATE_EVENT_DOCUMENTATION: Partial<ApiOperationOptions> = {
   summary: "Creates a new event",
   description: "Used to create a new event with the provided data",

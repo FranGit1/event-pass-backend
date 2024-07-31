@@ -121,7 +121,7 @@ export class ConfigurationService {
   }
 
   get firebaseBucketName(): string {
-    return this.configService.get('FIREBASE_PRIVATE_KEY');
+    return this.configService.get('FIREBASE_BUCKET_NAME');
   }
 
   get isProduction(): boolean {

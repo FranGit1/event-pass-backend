@@ -32,6 +32,10 @@ export class EventService {
         return this.eventRepository.findEventsByOrganization(organizationId);
     }
 
+    async findAllLiveEvents(): Promise<Event[] | null> {
+        return this.eventRepository.findAllLiveEvents();
+    }
+
     async createEvent(createEventDto: CreateEventDto, organizationId: number): Promise<Event> {
         const newEvent = this.autoMapper.map(createEventDto, CreateEventDto, Event);
         const eventLocation = this.autoMapper.map(createEventDto.location, CreateLocationReqDto, Location);

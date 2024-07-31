@@ -12,12 +12,12 @@ import {
 import {ApiTags, ApiOperation, ApiBearerAuth} from "@nestjs/swagger";
 import {Event} from "src/entities/event.entity";
 
-import {EventResDto} from "./dto/response/event.res.dto";
+import {EventResDto, EventsResDtoTopic} from "./dto/response/event.res.dto";
 import {
     CREATE_EVENT_DOCUMENTATION,
     DELETE_EVENT_BY_ID_DOCUMENTATION,
     GET_ALL_EVENTS_DOCUMENTATION,
-    GET_EVENT_BY_ID_DOCUMENTATION,
+    GET_EVENT_BY_ID_DOCUMENTATION, GET_LIVE_EVENTS_DOCUMENTATION,
     UPDATE_EVENT_BY_ID_DOCUMENTATION, UPDATE_EVENT_DOCUMENTATION,
 } from "./event.documentation";
 import {createHttpResponse} from "src/shared/http/create-http-response";
@@ -147,6 +147,31 @@ export class EventController {
     }
 
 
+    @ApiOperation(GET_LIVE_EVENTS_DOCUMENTATION)
+    @ApiBearerAuth()
+    @Get("/live/get-all")
+    async getAllLiveEvents(
+
+    ): Promise<HttpResponse<any[]>> {
+        const events = await this.eventService.findAllLiveEvents();
+
+        if (!events) {
+            throw new ConflictException("Events not found.");
+        }
+
+
+        const eventsOrganizationMapped = events.map((event)=>{
+            return {...this.autoMapper.map(event,Event,EventResDto), organization: {id: event.organization.id,
+                    title: event.organization.title
+                }}
+        })
+
+        return createHttpResponse(
+            HttpStatus.OK,
+            "Event retrieved successfully.",
+            eventsOrganizationMapped
+        );
+    }
 
 
 

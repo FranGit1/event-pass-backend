@@ -1,6 +1,6 @@
 import {Injectable} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
-import {Repository, DeleteResult, UpdateResult} from "typeorm";
+import {Repository, DeleteResult, UpdateResult, MoreThan} from "typeorm";
 import {CreatableEvent, EditableEvent} from "./event.type";
 import {BaseRepository} from "src/shared/base/base.repository";
 import {Event} from "src/entities/event.entity";
@@ -29,6 +29,14 @@ export class EventRepository extends BaseRepository<
     async createEvent(createEventDto: CreatableEvent): Promise<Event> {
         return await this.eventRepository.save(createEventDto);
     }
+    async findAllLiveEvents(): Promise<Event[]> {
+        const currentDate = new Date();
+        return await this.eventRepository.find({
+            where: {
+                endDate: MoreThan(currentDate),
+            },
+            relations:{location: true,topic: true,organization: true}
+        });    }
 
     async findAllEvents(): Promise<Event[]> {
         return this.eventRepository.find();

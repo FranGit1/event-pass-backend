@@ -8,7 +8,12 @@ import {GetOrganizationByOrganizerResDto} from "../organizer/dto/response/get-or
 import {CreateEventDto, CreateLocationReqDto} from "../event/dto/request/create-event.req.dto";
 import {Event} from "../../entities/event.entity";
 import {Location} from "../../entities/location.entity";
-import {EventResDto, EventsResDtoLocation, EventsResDtoTopic} from "../event/dto/response/event.res.dto";
+import {
+    EventResDto,
+    EventsResDtoLocation,
+    EventsResDtoOrganization,
+    EventsResDtoTopic
+} from "../event/dto/response/event.res.dto";
 import {OrganizerReqDto} from "../auth/dto/request/organizer.req.dto";
 import {Organizer} from "../../entities/organizer.entity";
 import {AllOrganizationsResDto} from "../organization/dto/response/all-organizations.res.dto";
@@ -32,6 +37,7 @@ export class AutomapperProfileTypes extends AutomapperProfile {
             createMap(mapper, Organization, AllOrganizationsResDto);
             createMap(mapper, Topic, EventsResDtoTopic);
             createMap(mapper, UpdateLocationReqDto, Location);
+            createMap(mapper, Organization, EventsResDtoOrganization);
 
 
         };
