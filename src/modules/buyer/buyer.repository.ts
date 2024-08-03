@@ -16,6 +16,10 @@ export class BuyerRepository {
     return this.buyerRepository.findOne({ where: { id: id } });
   }
 
+  findOneWithFav(id: number): Promise<Buyer | null> {
+    return this.buyerRepository.findOne({ where: { id: id },relations:{favoriteEvents: {organization: true}} });
+  }
+
   findOneByEmail(email: string): Promise<Buyer | null> {
     return this.buyerRepository.findOne({ where: { email: email } });
   }
@@ -33,4 +37,8 @@ export class BuyerRepository {
   async remove(id: number): Promise<void> {
     await this.buyerRepository.delete(id);
   }
+
+   async save(buyer: Buyer) {
+       return await  this.buyerRepository.save(buyer);
+    }
 }

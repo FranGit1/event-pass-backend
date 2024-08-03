@@ -7,17 +7,18 @@ import {
     Body,
     Param,
     HttpStatus,
-    ConflictException, UseInterceptors,
+    ConflictException, UseInterceptors, UseGuards,
 } from "@nestjs/common";
 import {ApiTags, ApiOperation, ApiBearerAuth} from "@nestjs/swagger";
 import {Event} from "src/entities/event.entity";
 
 import {EventResDto, EventsResDtoTopic} from "./dto/response/event.res.dto";
 import {
+    ADD_FAVORITE_EVENT_DOCUMENTATION,
     CREATE_EVENT_DOCUMENTATION,
     DELETE_EVENT_BY_ID_DOCUMENTATION,
     GET_ALL_EVENTS_DOCUMENTATION,
-    GET_EVENT_BY_ID_DOCUMENTATION, GET_LIVE_EVENTS_DOCUMENTATION,
+    GET_EVENT_BY_ID_DOCUMENTATION, GET_LIVE_EVENTS_DOCUMENTATION, REMOVE_FAVORITE_EVENT_DOCUMENTATION,
     UPDATE_EVENT_BY_ID_DOCUMENTATION, UPDATE_EVENT_DOCUMENTATION,
 } from "./event.documentation";
 import {createHttpResponse} from "src/shared/http/create-http-response";
@@ -33,6 +34,10 @@ import {LoggerInterceptor} from "../../shared/interceptors/logger.interceptor";
 import {OrganizationService} from "../organization/organization.service";
 import {Organization} from "../../entities/organization.entity";
 import {GetOrganizationByOrganizerResDto} from "../organizer/dto/response/get-organization-by-organizer.res.dto";
+import {ADD_FAVORITE_DOCUMENTATION, REMOVE_FAVORITE_DOCUMENTATION} from "../organization/organization.documentation";
+import {JwtGuard} from "../auth/guards/jwt.guard";
+import {AddFavoriteOrganizationReqDto} from "../organization/dto/request/add-favorite-organization.req.dto";
+import {AuthUserIdParam} from "../../shared/decorators/user.decorator";
 
 @ApiTags("Event")
 @Controller("events")
@@ -63,12 +68,16 @@ export class EventController {
     @Get(":id")
     async findEventById(
         @Param("id") id: number
-    ): Promise<HttpResponse<EventResDto>> {
+    ): Promise<HttpResponse<any>> {
         const event = await this.eventService.findEventById(id);
         if (!event) {
             throw new ConflictException("Event not found.");
         }
-        const payload = this.autoMapper.map(event, Event, EventResDto);
+
+        const payload =
+             {...this.autoMapper.map(event,Event,EventResDto), organization: {id: event.organization.id,
+                    title: event.organization.title
+                }}
 
         return createHttpResponse(
             HttpStatus.OK,
@@ -89,8 +98,15 @@ export class EventController {
         if (!events) {
             throw new ConflictException("Event not found.");
         }
+
+        const eventsMapped = events.map((event)=>  {return {...this.autoMapper.map(event,Event,EventResDto)
+            , organization: {id: event.organization.id,
+            title: event.organization.title}
+        }})
+
+
         const payload = {
-            events: this.autoMapper.mapArray(events, Event, EventResDto),
+            events: eventsMapped,
             organization: this.autoMapper.map(organization, Organization, GetOrganizationByOrganizerResDto)
         }
         return createHttpResponse(
@@ -172,7 +188,34 @@ export class EventController {
             eventsOrganizationMapped
         );
     }
-
+    @ApiOperation(ADD_FAVORITE_EVENT_DOCUMENTATION)
+    @ApiBearerAuth()
+    @UseGuards(JwtGuard)
+    @Post("favourite/create-fav-event")
+    async addFavorite(
+        @Body() data: EntityIdParam,
+        @AuthUserIdParam() userId: number
+    ): Promise<HttpResponse<void>> {
+        const eventId = data.id;
+        const payload = await this.eventService.addFavorite(
+            userId,
+            eventId
+        );
+        const message = "Event added to favorites successfully.";
+        return createHttpResponse(HttpStatus.OK, message, payload);
+    }
+    @ApiOperation(REMOVE_FAVORITE_EVENT_DOCUMENTATION)
+    @ApiBearerAuth()
+    @UseGuards(JwtGuard)
+    @Delete("favourite/:id")
+    async removeFavorite(
+        @Param("id") id: number,
+        @AuthUserIdParam() userId: number
+    ): Promise<HttpResponse<void>> {
+        const payload = await this.eventService.removeFavorite(userId, id);
+        const message = "Event removed from favorites successfully.";
+        return createHttpResponse(HttpStatus.OK, message, payload);
+    }
 
 
 }

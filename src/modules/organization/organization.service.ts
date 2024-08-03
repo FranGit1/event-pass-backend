@@ -51,8 +51,8 @@ export class OrganizationService {
 
         await this.organizationCodeService.markCodeAsUsed(organizationCode);
     }
-    findOne(id: number): Promise<Organization | null> {
-        return this.organizationRepository.findOne(id);
+    async findOne(id: number): Promise<Organization | null> {
+         return await this.organizationRepository.findOne(id);
     }
 
     findAll(): Promise<Organization[] | null> {

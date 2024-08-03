@@ -9,8 +9,8 @@ import {
 import { AuthService } from "./auth.service";
 import { ApiOperation } from "@nestjs/swagger";
 import {
-  LOGIN_DOCUMENTATION,
-  REGISTER_DOCUMENTATION,
+  LOGIN_DOCUMENTATION, REGISTER_BUYER_DOCUMENTATION,
+   REGISTER_ORGANIZER_DOCUMENTATION,
 } from "./auth.documentation";
 import {LoggerInterceptor} from "../../shared/interceptors/logger.interceptor";
 
@@ -25,11 +25,13 @@ export class AuthController {
     return await this.authService.login(body, res);
   }
 
-  @ApiOperation(REGISTER_DOCUMENTATION)
+
+
+  @ApiOperation(REGISTER_ORGANIZER_DOCUMENTATION)
   @Post("register-organizer")
   async register(@Req() req, @Res() res, @Body() body) {
     const authResult = await this.authService.createUser(body);
-    const { isValid, buyerDTO } = authResult;
+    const { isValid, organizerDto } = authResult;
     if (isValid) {
       res.status(201).json({
         success: true,
@@ -38,8 +40,27 @@ export class AuthController {
     } else {
       res.status(400).json({
         success: false,
-        buyerDTO: buyerDTO,
+        buyerDTO: organizerDto,
         msg: "Failed to create Organizer",
+      });
+    }
+  }
+
+  @ApiOperation(REGISTER_BUYER_DOCUMENTATION)
+  @Post("register-buyer")
+  async registerBuyer(@Req() req, @Res() res, @Body() body) {
+    const authResult = await this.authService.createBuyer(body);
+    const { isValid, buyerDTO } = authResult;
+    if (isValid) {
+      res.status(201).json({
+        success: true,
+        msg: "Buyer created with success",
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        buyerDTO: buyerDTO,
+        msg: "Failed to create buyer",
       });
     }
   }

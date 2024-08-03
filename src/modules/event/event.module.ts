@@ -9,9 +9,10 @@ import {LocationModule} from "../location/location.module";
 import {TopicModule} from "../topic/topic.module";
 import {OrganizationModule} from "../organization/organization.module";
 import {FirebaseModule} from "../firebase/firebase.module";
+import {BuyerModule} from "../buyer/buyer.module";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Event]), AutoMapperModule,LocationModule,TopicModule, OrganizationModule,FirebaseModule],
+  imports: [TypeOrmModule.forFeature([Event]), AutoMapperModule,LocationModule,TopicModule, OrganizationModule,FirebaseModule,BuyerModule],
   providers: [EventRepository, EventService],
   controllers: [EventController],
   exports: [EventService],

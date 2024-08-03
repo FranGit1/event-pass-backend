@@ -1,9 +1,11 @@
-import { Entity, Column, JoinColumn, OneToOne, ManyToOne } from 'typeorm';
+import {Entity, Column, JoinColumn, OneToOne, ManyToOne, ManyToMany} from 'typeorm';
 import { BaseEntity } from 'src/shared/base/base.entity';
 import { Location } from './location.entity';
 import { Topic } from './topic.entity';
 import {AutoMap} from "@automapper/classes";
 import {Organization} from "./organization.entity";
+import {Organizer} from "./organizer.entity";
+import {Buyer} from "./buyer.entity";
 
 
 @Entity()
@@ -54,6 +56,9 @@ export class Event extends BaseEntity {
   displayInSlider: boolean;
 
   @AutoMap()
-  @Column()
+  @Column({nullable: true})
   sliderPosition: number;
+
+  @ManyToMany(() => Buyer, (buyer) => buyer.favoriteEvents)
+  favoriteBy: Buyer[];
 }

@@ -11,6 +11,7 @@ import {Location} from "../../entities/location.entity";
 import {TopicService} from "../topic/topic.service";
 import {OrganizationService} from "../organization/organization.service";
 import {FirebaseStorageService} from "../firebase/firebase-storage.service";
+import {BuyerService} from "../buyer/buyer.service";
 
 @Injectable()
 export class EventService {
@@ -19,6 +20,7 @@ export class EventService {
         private readonly locationService: LocationService,
         private readonly topicService: TopicService,
         private readonly organizationService: OrganizationService,
+        private readonly buyerService: BuyerService,
         private firebaseStorageService: FirebaseStorageService,
     @InjectMapper() private readonly autoMapper: Mapper
     ) {
@@ -36,7 +38,32 @@ export class EventService {
         return this.eventRepository.findAllLiveEvents();
     }
 
+    async addFavorite(buyerId: number, eventId: number): Promise<void> {
+        const buyer = await this.buyerService.findOneWithFav(buyerId);
+        const event = await this.eventRepository.findEventById(eventId);
+
+        if (buyer && event) {
+            buyer.favoriteEvents = [...buyer.favoriteEvents, event];
+            await this.buyerService.save(buyer);
+        }
+    }
+
+    async removeFavorite(buyerId: number, eventId: number): Promise<void> {
+        const buyer = await this.buyerService.findOneWithFav(buyerId);
+        const event = await this.eventRepository.findEventById(eventId);
+
+        if (buyer && event) {
+            buyer.favoriteEvents = buyer.favoriteEvents.filter(
+                (favEvent) => (favEvent.id !== event.id
+            ));
+            await this.buyerService.save(buyer);
+        }
+    }
+
     async createEvent(createEventDto: CreateEventDto, organizationId: number): Promise<Event> {
+        if(createEventDto.displayInSlider==null){
+            createEventDto.displayInSlider=false;
+        }
         const newEvent = this.autoMapper.map(createEventDto, CreateEventDto, Event);
         const eventLocation = this.autoMapper.map(createEventDto.location, CreateLocationReqDto, Location);
         const location = await this.locationService.create(eventLocation);

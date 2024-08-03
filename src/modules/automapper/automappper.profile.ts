@@ -19,6 +19,7 @@ import {Organizer} from "../../entities/organizer.entity";
 import {AllOrganizationsResDto} from "../organization/dto/response/all-organizations.res.dto";
 import {Topic} from "../../entities/topic.entity";
 import {UpdateLocationReqDto} from "../event/dto/request/update-event.req.dto";
+import {OrganizationDetailsDtoResDto} from "../organization/dto/response/organization-details-dto.res.dto";
 
 export class AutomapperProfileTypes extends AutomapperProfile {
     constructor(@InjectMapper() mapper: Mapper) {
@@ -38,6 +39,7 @@ export class AutomapperProfileTypes extends AutomapperProfile {
             createMap(mapper, Topic, EventsResDtoTopic);
             createMap(mapper, UpdateLocationReqDto, Location);
             createMap(mapper, Organization, EventsResDtoOrganization);
+            createMap(mapper, Organization, OrganizationDetailsDtoResDto);
 
 
         };

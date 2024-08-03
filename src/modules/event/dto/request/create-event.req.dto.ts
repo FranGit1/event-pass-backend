@@ -4,7 +4,7 @@ import {
   IsString,
   IsNumber,
   IsDate,
-  IsBoolean,
+  IsBoolean, IsOptional,
 } from "class-validator";
 import {AutoMap} from "@automapper/classes";
 
@@ -75,16 +75,16 @@ export class CreateEventDto {
   @AutoMap()
   featuredImage: string;
 
-  @ApiProperty({ required: true })
-  @IsNotEmpty()
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsBoolean()
   @AutoMap()
-  displayInSlider: boolean;
+  displayInSlider?: boolean;
 
-  @ApiProperty({ required: true })
-  @IsNotEmpty()
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsNumber()
   @AutoMap()
-  sliderPosition: number;
+  sliderPosition?: number;
 }
 

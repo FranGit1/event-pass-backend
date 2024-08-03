@@ -12,6 +12,7 @@ import axios from "axios";
 import {OrganizerService} from "../organizer/organizer.service";
 import {UserLogsService} from "../user-logs/user-logs.service";
 import {UserLogsEvent} from "../../shared/enums/UserLogsEvent";
+import {BuyerReqDto} from "./dto/request/buyer.req.dto";
 
 const SALT_ROUNDS = 10;
 
@@ -58,6 +59,28 @@ export class AuthService {
       return { isValid: true, organizerDTO };
     } catch (error) {
       return { isValid: false, organizerDTO };
+    }
+  }
+
+  async createBuyer(body: any): Promise<Record<string, any>> {
+    const buyerDto = new BuyerReqDto();
+    buyerDto.email = body.email;
+    buyerDto.firstName = body.firstName;
+    buyerDto.lastName = body.lastName;
+    buyerDto.username = body.username;
+    buyerDto.password = await hash(body.password, SALT_ROUNDS);
+    buyerDto.role = Role.buyer;
+    buyerDto.favoriteEvents = [];
+
+    const errors = await validate(buyerDto);
+    if (errors.length > 0) {
+      return { isValid: false, buyerDto };
+    }
+    try {
+      await this.buyerService.create(buyerDto);
+      return { isValid: true, buyerDto };
+    } catch (error) {
+      return { isValid: false, buyerDto };
     }
   }
 
@@ -122,6 +145,7 @@ export class AuthService {
       token,
       email: body.email,
       name: user.firstName,
+      role: user.role
       // id: user.id
     });
   }

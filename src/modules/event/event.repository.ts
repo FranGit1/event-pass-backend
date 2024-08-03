@@ -19,11 +19,11 @@ export class EventRepository extends BaseRepository<
     }
 
     async findEventById(id: number): Promise<Event | null> {
-        return this.eventRepository.findOne({where: {id: id},relations: {location: true, topic: true}});
+        return this.eventRepository.findOne({where: {id: id},relations: {location: true, topic: true,organization: true}});
     }
 
     async findEventsByOrganization(organizationId: number): Promise<Event[] | null> {
-        return this.eventRepository.find({where: {organization: {id: organizationId}},relations : {location: true}});
+        return this.eventRepository.find({where: {organization: {id: organizationId}},relations : {location: true,organization: true}});
     }
 
     async createEvent(createEventDto: CreatableEvent): Promise<Event> {

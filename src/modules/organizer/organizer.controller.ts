@@ -21,14 +21,7 @@ import { UpdateOrganizerDto } from "./dto/request/update-organizer.req.dto";
 import { OrganizerService } from "./organizer.service";
 import { Mapper } from "@automapper/core";
 import { InjectMapper } from "@timonmasberg/automapper-nestjs";
-import {Organization} from "../../entities/organization.entity";
-import {GetOrganizationByOrganizerResDto} from "./dto/response/get-organization-by-organizer.res.dto";
-import {HttpResponse} from "../../shared/http/http-response";
-import {createHttpResponse} from "../../shared/http/create-http-response";
 import {LoggerInterceptor} from "../../shared/interceptors/logger.interceptor";
-import {CREATE_EVENT_DOCUMENTATION} from "../event/event.documentation";
-import {CreateEventDto} from "../event/dto/request/create-event.req.dto";
-import {Event} from "../../entities/event.entity";
 
 @ApiTags("Organizers")
 @Controller("organizers")

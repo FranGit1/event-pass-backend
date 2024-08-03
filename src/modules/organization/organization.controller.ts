@@ -45,6 +45,7 @@ import {AddFavoriteOrganizationReqDto} from "./dto/request/add-favorite-organiza
 import {EntityIdParam} from "../event/dto/request/entity-id.param";
 import {PublicRouteResponseDto} from "../event/dto/response/public-route.res.dto";
 import {ApiCustomResponse} from "../../shared/decorators/api-response.decorator";
+import {OrganizationDetailsDtoResDto} from "./dto/response/organization-details-dto.res.dto";
 
 @ApiTags("Organizations")
 @Controller("organizations")
@@ -95,9 +96,14 @@ export class OrganizationController {
 
     @ApiOperation(GET_ORGANIZATION_BY_ID_DOCUMENTATION)
     @Get(":id")
-    findOne(@Param("id") id: number): Promise<Organization | null> {
-        return this.organizationService.findOne(id);
-    }
+    async findOne(@Param("id") id: number): Promise<HttpResponse<OrganizationDetailsDtoResDto>> {
+        const organization = await this.organizationService.findOne(id);
+    const payload = this.autoMapper.map(organization,Organization,OrganizationDetailsDtoResDto)
+    return createHttpResponse(
+        HttpStatus.OK,
+    "Organizations fetched successfully.",
+    payload
+);    }
 
 
     @ApiOperation(CREATE_ORGANIZATION_DOCUMENTATION)
@@ -187,7 +193,7 @@ export class OrganizationController {
         @AuthUserIdParam() userId: number
     ): Promise<HttpResponse<void>> {
         const payload = await this.organizationService.removeFavorite(userId, id);
-        const message = "Organization remove from favorites successfully.";
+        const message = "Organization removed from favorites successfully.";
         return createHttpResponse(HttpStatus.OK, message, payload);
     }
 
